@@ -13,7 +13,7 @@ class RegisterUserForm(UserCreationForm):
 		model = User
 		fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
-
+#this is a comment
 	def __init__(self, *args, **kwargs):
 		super(RegisterUserForm, self).__init__(*args, **kwargs)
 
