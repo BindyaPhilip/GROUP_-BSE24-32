@@ -1,2 +1,0 @@
-# GROUP_-BSE24-32
-DevOps
