@@ -1,0 +1,76 @@
+name:  CI
+
+# Trigger this workflow on push or pull requests to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Define the jobs for this workflow
+jobs:
+  test:
+    # The environment the job runs in
+    runs-on: ubuntu-latest
+
+    services:
+      # Use a PostgreSQL database (you can also use MySQL or SQLite based on your project)
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        # Make sure that the service is ready before starting tests
+        timeout: 600s
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python (specify the version)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # Set your Python version
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      # Step 4: Set up the database configuration for Django
+      - name: Set up database for Django
+        run: |
+          echo "DATABASES = { 'default': { 'ENGINE': 'django.db.backends.postgresql', 'NAME': 'test_db', 'USER': 'postgres', 'PASSWORD': 'postgres', 'HOST': 'localhost', 'PORT': '5432' } }" >> project/settings.py
+
+      # Step 5: Run migrations
+      - name: Run migrations
+        run: |
+          source venv/bin/activate
+          python manage.py migrate
+
+      # Step 6: Run tests
+      - name: Run Django tests
+        run: |
+          source venv/bin/activate
+          python manage.py test
+
+      # Optional Step: If you want to check for linting issues
+      - name: Run flake8 (Python linting)
+        run: |
+          source venv/bin/activate
+          pip install flake8
+          flake8 .
