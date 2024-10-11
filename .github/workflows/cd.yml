@@ -1,0 +1,41 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # This is your default branch where deployment will trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # This specifies the OS for the build environment
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # This checks out your code
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'  # Adjust based on your application's requirements
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Ensure your dependencies are listed in this file
+
+      - name: Run tests
+        run: |
+          pytest 
+
+  deploy:
+    runs-on: ubuntu-latest  # This specifies the OS for the deployment environment
+    needs: build  # Ensures that deployment runs after the build job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Checks out your code again
+
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}  # Secure way to use your Heroku API key
+        run: |
+          git remote add heroku https://git.heroku.com/cakeaddict-staging.git
+          git push heroku main  # This pushes the code to your Heroku app
