@@ -78,20 +78,32 @@ class cartItem(models.Model):
 
 
 
+#class Order(models.Model):
+ #   User = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+  #  item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
+   # quantity = models.IntegerField(default=1)
+    #created = models.DateTimeField(auto_now_add=True)
+    #total_ordering = models.IntegerField(default= 0)
+    #status = models.CharField(max_length=100, default='Pending')
+    #@property
+
+    #def total_odering(self, *args, **kwargs):
+     #   self.total_ordering = self.quantity * self.price
+      #  super(Cart, self).save(*args, **kwargs)
+       # x= self.total_ordering
+        #return x
 class Order(models.Model):
     User = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     item = models.ForeignKey(Item, on_delete=models.CASCADE, null=True)
     quantity = models.IntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
-    total_ordering = models.IntegerField(default= 0)
+    total_ordering = models.IntegerField(default=0)
     status = models.CharField(max_length=100, default='Pending')
-    @property
 
-    def total_odering(self, *args, **kwargs):
-        self.total_ordering = self.quantity * self.price
-        super(Cart, self).save(*args, **kwargs)
-        x= self.total_ordering
-        return x
+    @property
+    def total_odering(self):
+        self.total_ordering = self.quantity * self.item.price  # Access price from item
+        return self.total_ordering  # Return the calculated total
 
 
 
