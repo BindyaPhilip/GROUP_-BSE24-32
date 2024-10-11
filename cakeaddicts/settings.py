@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,9 +138,11 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #keys for the stripe api (payment gateway)
-STRIPE_SECRET_KEY = 'sk_test_51LmstwIcrvW4NoX9f0FtWODlbP8XiuRtd6817oFqFa1cYvWbUZNYhrveRxCExIwzJunj3lts9uVjbm7Rm7rRUY7P002PoVLWMe'
-STRIPE_PUBLISHABLE_KEY = 'pk_test_51LmstwIcrvW4NoX9WGPDv6PZ52lt8oc3vq9e5ynZ3bg2EU2djQVLWM64GYsWGYOpTwKk7SCMO9ZpwdDj0UkqpXEx00KLuwwyEd'
-
+#STRIPE_SECRET_KEY = 'sk_test_51LmstwIcrvW4NoX9f0FtWODlbP8XiuRtd6817oFqFa1cYvWbUZNYhrveRxCExIwzJunj3lts9uVjbm7Rm7rRUY7P002PoVLWMe'
+#STRIPE_PUBLISHABLE_KEY = 'pk_test_51LmstwIcrvW4NoX9WGPDv6PZ52lt8oc3vq9e5ynZ3bg2EU2djQVLWM64GYsWGYOpTwKk7SCMO9ZpwdDj0UkqpXEx00KLuwwyEd'
+SECRET_KEY = config('SECRET_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 
@@ -150,4 +153,4 @@ EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'rujumbaleonard2@gmail.com'
-EMAIL_HOST_PASSWORD = 'ihkxvuxwwgmardib'
+#EMAIL_HOST_PASSWORD = 'ihkxvuxwwgmardib'
