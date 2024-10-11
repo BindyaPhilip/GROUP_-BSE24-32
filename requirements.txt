@@ -3,3 +3,5 @@
 django
 pillow
 stripe
+pytest
+pytest-django
