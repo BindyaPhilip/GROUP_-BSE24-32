@@ -5,3 +5,4 @@ pillow
 stripe
 pytest
 pytest-django
+python-decouple
