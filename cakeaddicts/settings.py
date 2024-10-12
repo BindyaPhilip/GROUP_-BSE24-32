@@ -110,8 +110,8 @@ MEDIA_URL = 'uploadMedia/'
 # MEDIA_ROOT =  os.path.join(BASE_DIR, '/media/images') 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    os.path.join(BASE_DIR, 'cakestore'),
+    BASE_DIR / "static",  # This is the general static folder at the base level
+    os.path.join(BASE_DIR, 'cakestore', 'static'),  # This points to the static folder within the cakestore app
 ]
 
 #STATICFILES_DIRS = ( 
