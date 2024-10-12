@@ -104,15 +104,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = 'uploadMedia/'
 # MEDIA_ROOT =  os.path.join(BASE_DIR, '/media/images') 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    os.path.join(BASE_DIR, 'cakestore'),
+]
 
-STATICFILES_DIRS = ( 
-    'cakestore',
+#STATICFILES_DIRS = ( 
+#    'cakestore',
     # os.path.join(BASE_DIR, 'static'),
-    )
+ #   )
 
 
 # Internationalization
@@ -143,7 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECRET_KEY = config('SECRET_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-
+HEROKU_API_KEY = config('HEROKU_API_KEY')
 
 
 #STMP CONFIG
