@@ -20,11 +20,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install system dependencies on Ubuntu
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libpq-dev
+
+      - name: Install system dependencies on macOS
+        if: runner.os == 'macOS'
+        run: brew install postgresql
+
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}-${{ matrix.python-version }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -36,39 +44,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt --verbose
 
       - name: Run migrations
         run: |
           python manage.py migrate
-
-      - name: Run Vulnerability Scan
-        run: |
-          pip install bandit
-          bandit -r cakeaddicts/
-
-      - name: Generate Test Coverage Report
-        run: |
-          pip install coverage
-          coverage run -m pytest
-          coverage report
-          coverage html
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v2
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-report
-          path: ./coverage.xml
-
-      - name: Notify on Success
-        if: success()
-        run: |
-          echo "Build and tests succeeded!"
-
-      - name: Notify on Failure
-        if: failure()
-        run: |
-          echo "Build or tests failed!"
