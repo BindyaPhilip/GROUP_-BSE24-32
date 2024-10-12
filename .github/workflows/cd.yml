@@ -27,21 +27,16 @@ jobs:
           pytest  # Adjust if using a different test framework or command
 
   deploy:
-    runs-on: ubuntu-latest
-    needs: build  # Ensure deployment only happens after the build job is complete
+    runs-on: ubuntu-latest  # This specifies the OS for the deploy environment
+    name: Deploy Our Django Application to Heroku
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2  # Check out your code again in the deploy job
-
-      #- name: Set up Heroku CLI
-       # run: |
-          #curl https://cli-assets.heroku.com/install.sh | sh
-          #echo "${{ secrets.HEROKU_API_KEY }}" | heroku auth:token
+      - name: Checkout Code
+        uses: actions/checkout@v2  # Checks out the code from the repository
 
       - name: Deploy to Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }} 
-
-        run: |
-          git remote add heroku https://git.heroku.com/cakeaddicts-staging.git
-          git push heroku main  # This pushes the code to your Heroku app
+        uses: akhileshns/heroku-deploy@v3.13.15  # Heroku deployment action
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}  # Heroku API key from secrets
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}  # Must be unique in Heroku
+          heroku_email: "philbindya55@gmail.com"  # Your Heroku account email
+          branch: "main"  # The branch to deploy
