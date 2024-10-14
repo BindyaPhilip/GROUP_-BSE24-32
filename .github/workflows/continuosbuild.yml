@@ -22,7 +22,9 @@ jobs:
 
       - name: Install system dependencies on Ubuntu
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libpq-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-libmysqlclient-dev
 
       - name: Install system dependencies on macOS
         if: runner.os == 'macOS'
@@ -41,7 +43,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-        
       - name: Upgrade pip and install dependencies
         run: |
             python -m pip install --upgrade pip
