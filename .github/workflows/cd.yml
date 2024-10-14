@@ -21,7 +21,7 @@ jobs:
     - name: Set environment variables
       run: |
         echo "DJANGO_ENV=staging" >> $GITHUB_ENV  # Set the environment to staging
-        echo "MYSQL_DB_NAME=staging_db" >> $GITHUB_ENV
+        echo "MYSQL_DB_NAME=cakeaddicts" >> $GITHUB_ENV
         echo "MYSQL_DB_USER=${{ secrets.MYSQL_DATABASE_USER }}" >> $GITHUB_ENV
         echo "MYSQL_DB_PASSWORD=${{ secrets.MYSQL_DATABASE_PASSWORD }}" >> $GITHUB_ENV
         echo "MYSQL_DB_HOST=mystagingdb.mysql.database.azure.com" >> $GITHUB_ENV

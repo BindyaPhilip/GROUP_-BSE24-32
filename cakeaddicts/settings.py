@@ -81,26 +81,46 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cakeaddicts.wsgi.application'
 
-IS_STAGING = os.getenv('IS_STAGING', 'False') == 'True'
+# database
 
-if not IS_STAGING:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+# Default to SQLite for development
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('MYSQL_DATABASE_NAME'),
-            'USER': os.getenv('MYSQL_DATABASE_USER'),
-            'PASSWORD': os.getenv('MYSQL_DATABASE_PASSWORD'),
-            #'HOST': os.getenv('MYSQL_DATABASE_HOST'),  # Usually something like 'localhost' or the remote DB host
-            'PORT': os.getenv('MYSQL_DATABASE_PORT', '3306'),  # MySQL typically runs on port 3306
-        }
-    }
+}
+
+# Check if we are in the staging environment
+if os.getenv('DJANGO_ENV') == 'staging':
+    DATABASES['default'] = dj_database_url.config(
+        default=f"mysql://{os.getenv('MYSQL_DB_USER')}:{os.getenv('MYSQL_DB_PASSWORD')}@{os.getenv('MYSQL_DB_HOST')}/{os.getenv('MYSQL_DB_NAME')}",
+        conn_max_age=600
+    )
+
+
+
+
+#IS_STAGING = os.getenv('IS_STAGING', 'False') == 'True'
+
+#if not IS_STAGING:
+#    DATABASES = {
+#        'default': {
+#            'ENGINE': 'django.db.backends.sqlite3',
+#            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#        }
+#    }
+#else:
+ #   DATABASES = {
+  #      'default': {
+   ##         'ENGINE': 'django.db.backends.mysql',
+    #        'NAME': os.getenv('MYSQL_DATABASE_NAME'),
+     #       'USER': os.getenv('MYSQL_DATABASE_USER'),
+      #      'PASSWORD': os.getenv('MYSQL_DATABASE_PASSWORD'),
+       #     #'HOST': os.getenv('MYSQL_DATABASE_HOST'),  # Usually something like 'localhost' or the remote DB host
+        #    'PORT': os.getenv('MYSQL_DATABASE_PORT', '3306'),  # MySQL typically runs on port 3306
+       # }
+    #}
 
 
 
