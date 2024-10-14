@@ -41,8 +41,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install MySQL client libraries
-        run: sudo apt-get install -y libmysqlclient-dev
         
       - name: Install dependencies
         run: |
