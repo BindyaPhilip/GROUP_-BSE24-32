@@ -21,6 +21,11 @@ jobs:
         with:
           python-version: '3.12'  
 
+
+          
+      - name: Install MySQL client libraries
+        run: sudo apt-get install -y libmysqlclient-dev
+          
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

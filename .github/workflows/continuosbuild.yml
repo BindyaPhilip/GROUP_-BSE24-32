@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10']
+        python-version: ['3.10', '3.12']
 
     steps:
       - name: Checkout code
@@ -22,11 +22,13 @@ jobs:
 
       - name: Install system dependencies on Ubuntu
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libpq-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-libmysqlclient-dev
 
       - name: Install system dependencies on macOS
         if: runner.os == 'macOS'
-        run: brew install postgresql
+        run: brew install mysql
 
       - name: Cache dependencies
         uses: actions/cache@v3
@@ -41,10 +43,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install dependencies
+      - name: Upgrade pip and install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt --verbose
+            python -m pip install --upgrade pip
+            pip cache purge  # Clear pip cache
+            pip install --no-cache-dir -r requirements.txt --verbose --retries 5 --timeout 30
 
       - name: Run migrations
         run: |

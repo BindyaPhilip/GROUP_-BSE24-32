@@ -12,7 +12,15 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from decouple import config
+import pymysql
+
+
+
+pymysql.install_as_MySQLdb()
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,17 +81,80 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cakeaddicts.wsgi.application'
 
+IS_STAGING = os.getenv('IS_STAGING', 'False') == 'True'
 
+if not IS_STAGING:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('MYSQL_DATABASE_NAME'),
+            'USER': os.getenv('MYSQL_DATABASE_USER'),
+            'PASSWORD': os.getenv('MYSQL_DATABASE_PASSWORD'),
+            #'HOST': os.getenv('MYSQL_DATABASE_HOST'),  # Usually something like 'localhost' or the remote DB host
+            'PORT': os.getenv('MYSQL_DATABASE_PORT', '3306'),  # MySQL typically runs on port 3306
+        }
+    }
+
+
+
+
+
+# Determine the environment
+#ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')  # defaults to 'development'
+
+#if ENVIRONMENT == 'development':
+    # Use SQLite for development
+ #   DATABASES = {
+  #      'default': {
+  #          'ENGINE': 'django.db.backends.sqlite3',
+  #          'NAME': BASE_DIR / "db.sqlite3",
+   #     }
+    #}
+#else:
+    # Use MySQL for staging/production
+ #   DATABASES = {
+  #      'default': {
+   #         'ENGINE': 'django.db.backends.mysql',
+    #        'NAME': os.getenv('MYSQL_DB_NAME', 'production_db'),
+     #       'USER': os.getenv('MYSQL_DB_USER', 'myusername'),
+      #      'PASSWORD': os.getenv('MYSQL_DB_PASSWORD', 'mypassword'),
+       #     'HOST': os.getenv('MYSQL_DB_HOST', 'mystagingdb.mysql.database.azure.com'),
+        #    'PORT': '3306',
+       # }
+   # }
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.sqlite3',
+   #     'NAME': BASE_DIR / 'db.sqlite3',
+   # }
+#}
+#IS_STAGING = os.getenv('IS_STAGING', 'False') == 'True'
 
+#if not IS_STAGING:
+    # Development: Use SQLite
+ #   DATABASES = {
+  #      'default': {
+   #         'ENGINE': 'django.db.backends.sqlite3',
+    #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+      #  }
+   # }
+#else:
+    # Staging/Production: Use PostgreSQL/MySQL
+ #   DATABASES = {
+  #      'default': dj_database_url.config(
+   #         default=os.getenv('DATABASE_URL')
+    #    )
+    #}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -148,7 +219,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECRET_KEY = config('SECRET_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-HEROKU_API_KEY = config('HEROKU_API_KEY')
+#HEROKU_API_KEY = config('HEROKU_API_KEY')
 
 
 #STMP CONFIG
