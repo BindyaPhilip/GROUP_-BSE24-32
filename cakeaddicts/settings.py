@@ -81,44 +81,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cakeaddicts.wsgi.application'
 
-# database
-
-
-ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')
-
-if ENVIRONMENT == 'staging':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('MYSQL_DB_NAME', 'cakeaddicts'),
-            'USER': os.getenv('MYSQL_DB_USER', 'root'),
-            'PASSWORD': os.getenv('MYSQL_DB_PASSWORD', 'Osbertpro@1976'),
-            'HOST': os.getenv('MYSQL_DB_HOST', '127.0.0.1'),
-            'PORT': '3306',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+# settings.py
 
 # Default to SQLite for development
-#DATABASES = {
- #   'default': {
-  #      'ENGINE': 'django.db.backends.sqlite3',
-   #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-   # }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Check if we are in the staging environment
-#if os.getenv('DJANGO_ENV') == 'staging':
- #   DATABASES['default'] = dj_database_url.config(
-  #      default=f"mysql://{os.getenv('MYSQL_DB_USER')}:{os.getenv('MYSQL_DB_PASSWORD')}@{os.getenv('MYSQL_DB_HOST')}/{os.getenv('MYSQL_DB_NAME')}",
-   #     conn_max_age=600
-   # )
+if os.getenv('DJANGO_ENV') == 'staging':
+    DATABASES['default'] = dj_database_url.config(
+        default=f"mysql://{os.getenv('MYSQL_DB_USER')}:{os.getenv('MYSQL_DB_PASSWORD')}@{os.getenv('MYSQL_DB_HOST')}/{os.getenv('MYSQL_DB_NAME')}",
+        conn_max_age=600
+    )
 
 
 
