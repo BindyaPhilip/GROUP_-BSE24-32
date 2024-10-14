@@ -16,14 +16,14 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.13.0'
+        python-version: '3.12'
 
     - name: Set environment variables
       run: |
         echo "DJANGO_ENV=staging" >> $GITHUB_ENV  # Set the environment to staging
         echo "MYSQL_DB_NAME=cakeaddicts" >> $GITHUB_ENV
-        echo "MYSQL_DB_USER=${{ secrets.MYSQL_DATABASE_USER }}" >> $GITHUB_ENV
-        echo "MYSQL_DB_PASSWORD=${{ secrets.MYSQL_DATABASE_PASSWORD }}" >> $GITHUB_ENV
+        echo "MYSQL_DB_USER=${{ secrets.MYSQL_DB_USER }}" >> $GITHUB_ENV
+        echo "MYSQL_DB_PASSWORD=${{ secrets.MYSQL_DB_PASSWORD }}" >> $GITHUB_ENV
         echo "MYSQL_DB_HOST=mystagingdb.mysql.database.azure.com" >> $GITHUB_ENV
 
     - name: Install MySQL client libraries
@@ -50,5 +50,5 @@ jobs:
     - name: Deploy to Azure
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'Cakeaddicts-staging'  # Your web app name
+        app-name: 'my-django-app-staging'  # Your web app name
         publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
