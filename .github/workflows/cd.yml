@@ -9,6 +9,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: Osbertpro@1976
+          MYSQL_DATABASE: cakeaddicts
+          MYSQL_USER: root
+          MYSQL_PASSWORD: Osbertpro@1976
+        ports:
+          - 3306:3306
+        options: "--health-cmd='mysqladmin ping --silent' --health-interval=10s --health-timeout=5s --health-retries=3"
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -22,9 +34,9 @@ jobs:
       run: |
         echo "DJANGO_ENV=staging" >> $GITHUB_ENV  # Set the environment to staging
         echo "MYSQL_DB_NAME=cakeaddicts" >> $GITHUB_ENV
-        echo "MYSQL_DB_USER=${{ secrets.MYSQL_DATABASE_USER }}" >> $GITHUB_ENV
-        echo "MYSQL_DB_PASSWORD=${{ secrets.MYSQL_DATABASE_PASSWORD }}" >> $GITHUB_ENV
-        echo "MYSQL_DB_HOST=localhost" >> $GITHUB_ENV
+        echo "MYSQL_DB_USER=root" >> $GITHUB_ENV
+        echo "MYSQL_DB_PASSWORD=Osbertpro@1976" >> $GITHUB_ENV
+        echo "MYSQL_DB_HOST=127.0.0.1" >> $GITHUB_ENV
 
     - name: Install MySQL client libraries
       run: sudo apt-get install -y libmysqlclient-dev  # Install MySQL dev tools
@@ -33,6 +45,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Set up the database
+      run: |
+        mysql --host=127.0.0.1 --user=root --password=Osbertpro@1976 -e "CREATE DATABASE IF NOT EXISTS cakeaddicts;"
+
+    - name: Run migrations
+      run: |
+        python manage.py migrate
 
     - name: Run tests
       run: |
