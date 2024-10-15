@@ -1,2 +1,2 @@
-# grp-32-prac
+# Group_BSE24-32
 Lets hope
