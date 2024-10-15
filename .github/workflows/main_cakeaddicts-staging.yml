@@ -27,7 +27,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: CollectStatic files
-        run: python manage.py collectstatic 
+        run: python manage.py collectstatic --noinput
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: List files
