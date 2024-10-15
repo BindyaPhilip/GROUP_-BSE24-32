@@ -14,11 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from decouple import config
-import pymysql
 
-
-
-pymysql.install_as_MySQLdb()
 
 
 
@@ -92,11 +88,11 @@ DATABASES = {
 }
 
 # Check if we are in the staging environment
-if os.getenv('DJANGO_ENV') == 'staging':
-    DATABASES['default'] = dj_database_url.config(
-        default=f"mysql://{os.getenv('MYSQL_DB_USER')}:{os.getenv('MYSQL_DB_PASSWORD')}@{os.getenv('MYSQL_DB_HOST')}/{os.getenv('MYSQL_DB_NAME')}",
-        conn_max_age=600
-    )
+#if os.getenv('DJANGO_ENV') == 'staging':
+ #   DATABASES['default'] = dj_database_url.config(
+  #      default=f"mysql://{os.getenv('MYSQL_DB_USER')}:{os.getenv('MYSQL_DB_PASSWORD')}@{os.getenv('MYSQL_DB_HOST')}/{os.getenv('MYSQL_DB_NAME')}",
+   #     conn_max_age=600
+   # )
 
 
 
