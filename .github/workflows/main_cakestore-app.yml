@@ -84,6 +84,3 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_744358FE4AE045DA8BAA5E73D3513E54 }}
 
      
-      # Explicitly change to the correct working directory before running commands
-      #- name: Change to project directory
-      #  run: cd /home/site/wwwroot
