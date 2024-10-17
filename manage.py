@@ -6,7 +6,9 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cakeaddicts.settings')
+    settings_module = 'cakeaddicts.deployment'  if 'WEBSITE_HOSTNAME' in os.environ else 'cakeaddicts.settings'
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
+    #os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'cakeaddicts.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
