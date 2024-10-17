@@ -231,10 +231,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SECRET_KEY='django-insecure-b0%zs_fyk!@-d03w782n+dt5y)*k!bfb!=s7g36m)823yzq%(+'
 #keys for the stripe api (payment gateway)
-#STRIPE_SECRET_KEY = 'sk_test_51LmstwIcrvW4NoX9f0FtWODlbP8XiuRtd6817oFqFa1cYvWbUZNYhrveRxCExIwzJunj3lts9uVjbm7Rm7rRUY7P002PoVLWMe'
+STRIPE_SECRET_KEY = 'sk_test_51LmstwIcrvW4NoX9f0FtWODlbP8XiuRtd6817oFqFa1cYvWbUZNYhrveRxCExIwzJunj3lts9uVjbm7Rm7rRUY7P002PoVLWMe'
 #STRIPE_PUBLISHABLE_KEY = 'pk_test_51LmstwIcrvW4NoX9WGPDv6PZ52lt8oc3vq9e5ynZ3bg2EU2djQVLWM64GYsWGYOpTwKk7SCMO9ZpwdDj0UkqpXEx00KLuwwyEd'
 #SECRET_KEY = config('SECRET_KEY')
-STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+#STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 #HEROKU_API_KEY = config('HEROKU_API_KEY')
 
