@@ -33,5 +33,5 @@ jobs:
     - name: Install Dependencies
       run: pip install --no-cache-dir -r requirements.txt --verbose --retries 5 --timeout 30
 
-  #  - name: Run Tests
-   #   run: pytest
+    - name: Run Tests
+      run: pytest
