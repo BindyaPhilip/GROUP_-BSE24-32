@@ -64,6 +64,16 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      - name: Run database migrations
+        run: |
+          source venv/bin/activate  # Activate the virtual environment
+          python manage.py migrate
+        
+      
+      # Explicitly change to the correct working directory before running commands
+      - name: Change to project directory
+        run: cd /home/site/wwwroot
+
       
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
@@ -73,10 +83,7 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_744358FE4AE045DA8BAA5E73D3513E54 }}
 
-      # Optional step to run migrations after deployment
-      - name: Run Django Migrations
-        run: python manage.py migrate
-
+     
       # Explicitly change to the correct working directory before running commands
       - name: Change to project directory
         run: cd /home/site/wwwroot
