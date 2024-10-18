@@ -48,3 +48,19 @@ DATABASES = {
 
 }
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'azure': {
+            'class': 'path.to.AzureLogHandler',  # Implement Azure Log handler
+        },
+    },
+    'root': {
+        'handlers': ['console', 'azure'],
+        'level': 'WARNING',
+    },
+}
