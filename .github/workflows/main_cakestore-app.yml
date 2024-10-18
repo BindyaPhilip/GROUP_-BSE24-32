@@ -65,16 +65,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      #- name: Run database migrations
-       # run: |
-        #  source venv/bin/activate  # Activate the virtual environment
-         # python manage.py migrate
-        
-      
-      # Explicitly change to the correct working directory before running commands
-     # - name: Change to project directory
-      #  run: cd /home/site/wwwroot
-
       
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
