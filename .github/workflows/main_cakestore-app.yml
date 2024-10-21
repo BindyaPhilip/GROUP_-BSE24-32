@@ -5,10 +5,10 @@
 name: Build and deploy Python app to Azure Web App - cakestore-app
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  push:  # Trigger on push events to any branch
+    branches: 
+      - '**'  # This means all branches
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   build:
@@ -66,7 +66,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for testing
-        run: unzip release.zip
+        run: unzip -o release.zip
 
       - name: Create and start virtual environment
         run: |
@@ -106,7 +106,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip -o release.zip
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
