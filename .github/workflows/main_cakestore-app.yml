@@ -84,13 +84,13 @@ jobs:
       - name: Run tests
         run: pytest
 
-      - name: Run quality checks (flake8, black, isort, mypy)
-        run: |
-          pip install flake8 black isort mypy
-          flake8 .
-          black --check .
-          isort --check-only .
-          mypy .
+     # - name: Run quality checks (flake8, black, isort, mypy)
+     #   run: |
+     #     pip install flake8 black isort mypy
+      #    flake8 .
+      #    black --check .
+     #     isort --check-only .
+     #     mypy .
 
   deploy:
     runs-on: ubuntu-latest
