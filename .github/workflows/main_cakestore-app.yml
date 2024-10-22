@@ -84,6 +84,17 @@ jobs:
       - name: Run tests
         run: pytest
 
+
+      - name: Install dependencies
+        run: |
+          pip install flake8 black isort mypy
+
+
+      - name: Run quality checks
+        run: |
+          .\run_quality_checks.bat  
+
+
      # - name: Run quality checks (flake8, black, isort, mypy)
      #   run: |
      #     pip install flake8 black isort mypy
