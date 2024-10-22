@@ -51,7 +51,7 @@ jobs:
         run: |
           source venv/bin/activate
           python manage.py collectstatic --noinput
-          
+
       - name: Zip artifact for deployment
         run: zip release.zip . -r --exclude venv/*
 
@@ -95,31 +95,31 @@ jobs:
         run: pytest
 
 
-      - name: Install dependencies
-        run: |
-          pip install flake8 black isort mypy
-
       # Conditional quality checks
       - name: Install quality check dependencies
         run: |
+          source venv/bin/activate
           pip install flake8 black isort mypy
 
-      # For Windows, run the .bat file
+      # Run quality checks on Windows
       - name: Run quality checks on Windows
         if: runner.os == 'Windows'
-        run: .\run_quality_checks.bat
-
-      # For Linux and macOS, use alternative tools (flake8, black, isort, mypy)
-      - name: Run quality checks on Linux/macOS
-        if: runner.os != 'Windows'
         run: |
+          .\venv\Scripts\activate  # Activate virtual environment on Windows
           flake8 .
           black --check .
           isort --check-only .
           mypy .
-      #- name: Run quality checks
-       # run: |
-        #  .\run_quality_checks.bat  
+
+      # Run quality checks on Linux/macOS
+      - name: Run quality checks on Linux/macOS
+        if: runner.os != 'Windows'
+        run: |
+          source venv/bin/activate  # Activate virtual environment on Linux/macOS
+          flake8 .
+          black --check .
+          isort --check-only .
+          mypy .  
 
 
      # - name: Run quality checks (flake8, black, isort, mypy)
