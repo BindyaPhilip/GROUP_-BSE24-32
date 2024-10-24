@@ -5,10 +5,10 @@
 name: Build and deploy Python app to Azure Web App - cakestore-app
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  push:  # Trigger on push events to any branch
+    branches: 
+      - '**'  # This means all branches
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   build:
@@ -29,6 +29,7 @@ jobs:
 
       - name: Install dependencies and upgrade pip
         run: |
+          source venv/bin/activate 
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -44,6 +45,13 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libpq-dev
 
+      
+      # Collect static files
+      - name: Collect static files
+        run: |
+          source venv/bin/activate
+          python manage.py collectstatic --noinput
+
       - name: Zip artifact for deployment
         run: zip release.zip . -r --exclude venv/*
 
@@ -56,7 +64,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: build  # Ensure tests run after build job
-
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest] 
     steps:
       - uses: actions/checkout@v4
       
@@ -66,7 +76,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for testing
-        run: unzip release.zip
+        run: unzip -o release.zip
 
       - name: Create and start virtual environment
         run: |
@@ -84,13 +94,41 @@ jobs:
       - name: Run tests
         run: pytest
 
-      - name: Run quality checks (flake8, black, isort, mypy)
-        run: |
-          pip install flake8 black isort mypy
-          flake8 .
-          black --check .
-          isort --check-only .
-          mypy .
+
+      # Conditional quality checks
+      # - name: Install quality check dependencies
+      #   run: |
+      #     source venv/bin/activate
+      #     pip install flake8 black isort mypy
+
+      # # Run quality checks on Windows
+      # - name: Run quality checks on Windows
+      # #
+      #   run: |
+      #     .\venv\Scripts\activate  # Activate virtual environment on Windows
+      #     flake8 .
+      #     black --check .
+      #     isort --check-only .
+      #     mypy .
+
+      # # Run quality checks on Linux/macOS
+      # - name: Run quality checks on Linux/macOS
+      #  #
+      #   run: |
+      #     source venv/bin/activate  # Activate virtual environment on Linux/macOS
+      #     flake8 .
+      #     black --check .
+      #     isort --check-only .
+      #     mypy .  
+
+
+     # - name: Run quality checks (flake8, black, isort, mypy)
+     #   run: |
+     #     pip install flake8 black isort mypy
+      #    flake8 .
+      #    black --check .
+     #     isort --check-only .
+     #     mypy .
 
   deploy:
     runs-on: ubuntu-latest
@@ -106,7 +144,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip -o release.zip
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3

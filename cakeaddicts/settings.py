@@ -149,16 +149,21 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = (str(BASE_DIR.joinpath('cakestore/static')),)
+STATIC_URL = '/cakestore/static/'
 MEDIA_URL = 'uploadMedia/'
 # MEDIA_ROOT =  os.path.join(BASE_DIR, '/media/images') 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # This is the general static folder at the base level
-    os.path.join(BASE_DIR, 'cakestore', 'static'),  # This points to the static folder within the cakestore app
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",  # This is the general static folder at the base level
+#     os.path.join(BASE_DIR, 'cakestore', 'static'),  # This points to the static folder within the cakestore app
+# ]
 
 #STATICFILES_DIRS = ( 
 #    'cakestore',
