@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
 from decouple import config
 
 
@@ -97,54 +96,12 @@ DATABASES = {
 
 
 
-#IS_STAGING = os.getenv('IS_STAGING', 'False') == 'True'
-
-#if not IS_STAGING:
-#    DATABASES = {
-#        'default': {
-#            'ENGINE': 'django.db.backends.sqlite3',
-#            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#        }
-#    }
-#else:
- #   DATABASES = {
-  #      'default': {
-   ##         'ENGINE': 'django.db.backends.mysql',
-    #        'NAME': os.getenv('MYSQL_DATABASE_NAME'),
-     #       'USER': os.getenv('MYSQL_DATABASE_USER'),
-      #      'PASSWORD': os.getenv('MYSQL_DATABASE_PASSWORD'),
-       #     #'HOST': os.getenv('MYSQL_DATABASE_HOST'),  # Usually something like 'localhost' or the remote DB host
-        #    'PORT': os.getenv('MYSQL_DATABASE_PORT', '3306'),  # MySQL typically runs on port 3306
-       # }
-    #}
 
 
 
 
 
-# Determine the environment
-#ENVIRONMENT = os.getenv('DJANGO_ENV', 'development')  # defaults to 'development'
 
-#if ENVIRONMENT == 'development':
-    # Use SQLite for development
- #   DATABASES = {
-  #      'default': {
-  #          'ENGINE': 'django.db.backends.sqlite3',
-  #          'NAME': BASE_DIR / "db.sqlite3",
-   #     }
-    #}
-#else:
-    # Use MySQL for staging/production
- #   DATABASES = {
-  #      'default': {
-   #         'ENGINE': 'django.db.backends.mysql',
-    #        'NAME': os.getenv('MYSQL_DB_NAME', 'production_db'),
-     #       'USER': os.getenv('MYSQL_DB_USER', 'myusername'),
-      #      'PASSWORD': os.getenv('MYSQL_DB_PASSWORD', 'mypassword'),
-       #     'HOST': os.getenv('MYSQL_DB_HOST', 'mystagingdb.mysql.database.azure.com'),
-        #    'PORT': '3306',
-       # }
-   # }
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -190,16 +147,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' 
+# STATIC_URL = 'static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 #STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = (str(BASE_DIR.joinpath('cakestore/static')),)
+STATIC_URL = '/cakestore/static/'
 MEDIA_URL = 'uploadMedia/'
 # MEDIA_ROOT =  os.path.join(BASE_DIR, '/media/images') 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/images')
-STATICFILES_DIRS = [
-    BASE_DIR / "static",  # This is the general static folder at the base level
-    os.path.join(BASE_DIR, 'cakestore', 'static'),  # This points to the static folder within the cakestore app
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",  # This is the general static folder at the base level
+#     os.path.join(BASE_DIR, 'cakestore', 'static'),  # This points to the static folder within the cakestore app
+# ]
 
 #STATICFILES_DIRS = ( 
 #    'cakestore',
@@ -232,10 +196,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SECRET_KEY='django-insecure-b0%zs_fyk!@-d03w782n+dt5y)*k!bfb!=s7g36m)823yzq%(+'
 #keys for the stripe api (payment gateway)
-#STRIPE_SECRET_KEY = 'sk_test_51LmstwIcrvW4NoX9f0FtWODlbP8XiuRtd6817oFqFa1cYvWbUZNYhrveRxCExIwzJunj3lts9uVjbm7Rm7rRUY7P002PoVLWMe'
+STRIPE_SECRET_KEY = 'sk_test_51LmstwIcrvW4NoX9f0FtWODlbP8XiuRtd6817oFqFa1cYvWbUZNYhrveRxCExIwzJunj3lts9uVjbm7Rm7rRUY7P002PoVLWMe'
 #STRIPE_PUBLISHABLE_KEY = 'pk_test_51LmstwIcrvW4NoX9WGPDv6PZ52lt8oc3vq9e5ynZ3bg2EU2djQVLWM64GYsWGYOpTwKk7SCMO9ZpwdDj0UkqpXEx00KLuwwyEd'
 #SECRET_KEY = config('SECRET_KEY')
-STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+#STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 #HEROKU_API_KEY = config('HEROKU_API_KEY')
 
@@ -248,3 +212,23 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'rujumbaleonard2@gmail.com'
 #EMAIL_HOST_PASSWORD = 'ihkxvuxwwgmardib'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
